@@ -28,7 +28,7 @@ class Breathe:
 		self.x += step
 		if self.x > (self.n * 2000):
 			self.x -= (self.n * 2000)
-		return("moved to x=%f, %f" % (self.x, compute(self.x,self.n)))
+		return(round(compute(self.x,self.n),3))
 
 	'''
 	Given a temperature in celsius:
@@ -40,42 +40,32 @@ class Breathe:
 	'''
 	def change(self, temp):
 		key = round(compute(self.x, self.n),2)
+		
 		if compute(self.x + 1, self.n) > key:
-			increasing = True
+			rising = True
 		else:
-			increasing = False
+			rising = False
 
 		self.n = round(3.07996 - 0.650564 * math.log(temp),3)
 
-		point = self.binSearch(key, 0, 2000 * self.n)
-
-		if increasing:
-#			print("increasing, %d" % point)
-			self.x = point
+		if self.x != 0:
+			if rising:
+				self.x = self.binSearch(key, 0, 2000 * self.n)
+			else:
+				self.x = (1000 * self.n) - self.binSearch(key, 0, 2000 * self.n)
 		else:
-#			print("decreasing, %d" % point)
-			self.x = (1000 * self.n) - point
+			pass
 
-		return("changed to x=%f, n=%f" % (self.x, self.n))
+		return(self.x, self.n)
 
 	def binSearch(self, key, imin, imax):
 		imid = round((imin + imax)/2)
 
-#		print("%0.3f\t%0.3f\t%0.3f\t%0.3f" % (key, compute(imin, self.n), compute(imid, self.n), compute(imax, self.n)))
-
 		if compute(imax, self.n) > key or compute(imin, self.n) < key:
-#			print("\t%d\t%d\t%d" % (imin, imid, imax))
-#			print("%d\t%f" % (self.x, self.n))
-#			print("failed")
 			return 0
-
-		if round(compute(imax, self.n),3) == key:
-			return imax
-		elif round(compute(imin, self.n),3) == key:
-			return imin
 		elif round(compute(imid, self.n),3) < key:
-			return self.binSearch(key, imin, imid - 1)
+			return self.binSearch(key, imin, imid + 1)
 		elif round(compute(imid, self.n),3) > key:
-			return self.binSearch(key, imid + 1, imax)
+			return self.binSearch(key, imid - 1, imax)
 		else:
 			return imid
