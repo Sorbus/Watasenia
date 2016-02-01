@@ -1,25 +1,20 @@
 '''
-breathing LEDs
-based on http://sean.voisen.org/blog/2011/10/breathing-led-with-arduino/
+simple sine wave
 
-uses the equation:
-(e^cos(x*pi/(2000*n)) - 1/e) * ( (e^2-1) / e^2) / (e-(1/e) ) + 0.135
-	Maximum: 1
-	Minimum: ~0.135
-	Period: 2000n
+well, cosine wave
 '''
 
 from memoized import memoized
 from patterns import Intensity
 import math
 
-class Breathe(Intensity):
+class Sine(Intensity):
 	def __init__(self):
 		Intensity.__init__(self) # inheritance
 
 	@memoized
 	def curve(self, x, n):
-		return (math.exp(math.cos(x*math.pi/(2000*n))) - 0.36787 ) * 0.36787 + 0.135
+		return (math.cos(x*math.pi/(1000*n)) / 2) + 0.5
 
 	'''
 	The curve used is a logarithmic fit to {{25,1.0},{50,0.5},{80,0.25}}:
