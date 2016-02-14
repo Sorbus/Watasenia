@@ -9,8 +9,8 @@ uses the equation:
 	Period: 2000n
 '''
 
-from memoized import memoized
-from patterns import Intensity
+from modules.memoized import memoized
+from modules.patterns import Intensity
 import math
 
 class Breathe(Intensity):

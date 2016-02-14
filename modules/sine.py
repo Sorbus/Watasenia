@@ -4,8 +4,8 @@ simple sine wave
 well, cosine wave
 '''
 
-from memoized import memoized
-from patterns import Intensity
+from modules.memoized import memoized
+from modules.patterns import Intensity
 import math
 
 class Sine(Intensity):
