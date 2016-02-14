@@ -1,7 +1,10 @@
+from datetime import datetime
+
 class Intensity:
 	def __init__(self):
 		self.x = 0 # set time to 0
 		self.n = 2 # initial n is *always* 2. It should be changed immediately.
+		self.time = False
 
 	# the curve which the method follows
 	# probably a good idea to always memoize this
@@ -14,10 +17,20 @@ class Intensity:
 
 	# Given a number of milliseconds, moves along the curve and returns the new point
 	# NOTE: we assume that the period is always 2000n. 
-	def move(self, step):
-		self.x += step
+	# If step is not set, figure out how long it's been!
+	def move(self, step=-1):
+		if step != -1:
+			self.x += step
+			self.time = datetime.now()
+		else:
+			if not self.time:
+				self.time = datetime.now()
+			else:
+				new = datetime.now()
+				self.x += int((new - self.time).total_seconds()*1000)
+				self.time = new
 		if self.x > (self.n * 2000):
-			self.x -= (self.n * 2000)
+			self.x -= (self.n * 4000)
 		return(round(self.curve(self.x,self.n),3))
 
 	# Given a temperature in celsius:
