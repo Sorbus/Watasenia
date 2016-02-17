@@ -20,6 +20,8 @@ def setup(q):
 	elif response == 4:
 		while True:
 			snippets.rgbFill(ledString, 1)
+	elif response == 5:
+		snippets.breathe2(ledString, Color('blue'))
 	else:
 		quit()
 
@@ -39,6 +41,7 @@ if __name__ == '__main__':
 	1: Gentle Breathing\n\
 	2: Swirling Rainbow\n\
 	3: Fading Rainbow\n\
-	4: Rotating Pattern")
+	4: Rotating Pattern\n\
+	5: Temperature")
 	response = int(input("> "))
 	child_conn.send(response)

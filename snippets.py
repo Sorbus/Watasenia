@@ -1,6 +1,7 @@
 from colour import Color
 from time import sleep
 from modules.breathe import Breathe
+import temperature
 import datetime
 
 def rgbSolid(ledString, wait):
@@ -55,7 +56,7 @@ def travel(ledString, color, wait):
 		ledString.put(color, i+1)
 		sleep(wait)
 
-def breathe(ledString, color):
+def breathe(ledString, color, static=True):
 	b = Breathe()
 	c = color
 
@@ -63,3 +64,19 @@ def breathe(ledString, color):
 		c.luminance = (b.move()*0.5)
 		ledString.fill(c)
 		sleep(0.05)
+
+def breathe2(ledString, color):
+	b = Breathe()
+	c = color
+
+	while True:
+		note = 0
+		temp = temperature.get_CPU_Core()
+		print("Adjusting:\told x: %i\told n: %f" % (b.x, b.n))
+		b.change(temp)
+		print("%i\t\tnew x: %i\tnew n: %f" % (temp, b.x, b.n))
+		while note < 40:
+			c.luminance = (b.move()*0.5)
+			ledString.fill(c)
+			sleep(0.05)
+			note += 1
