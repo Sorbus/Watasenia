@@ -37,17 +37,19 @@ class Intensity:
 	#	- changes n to match that temperature
 	#	- moves to an appropriate point in the curve to avoid jitteriness
 	def change(self, temp):
-		key = round(self.curve(self.x, self.n),2)
-		
-		rising = (self.curve(self.x + 1, self.n) > key)
+		if self.n == round(self.scale(temp),3):
+			pass
+		else:
+			key = round(self.curve(self.x, self.n),3)
+			self.n = round(self.scale(temp),3)
 
-		self.n = round(self.scale(temp),3)
-
-		if self.x != 0:
-			self.x = self.binSearch(key, 0, 2000 * self.n)
-
-			if not rising:
-				self.x = (1000 * self.n) - self.x
+			if self.x != 0:
+				if self.x > 0:
+					self.x = self.binSearch(key, 0, 2000 * self.n)
+				else:
+					self.x = self.binSearch(key, -2000 * self.n, 0)
+			else:
+				pass
 
 		return(self.x, self.n)
 
@@ -55,13 +57,32 @@ class Intensity:
 	Binary search algorithm for equations.
 	'''
 	def binSearch(self, key, imin, imax):
-		imid = round((imin + imax)/2)
-
-		if self.curve(imax, self.n) > key or self.curve(imin, self.n) < key:
+		if imax < imin: # key not in set!
 			return 0
-		elif round(self.curve(imid, self.n),3) < key:
-			return self.binSearch(key, imin, imid + 1)
-		elif round(self.curve(imid, self.n),3) > key:
-			return self.binSearch(key, imid - 1, imax)
 		else:
-			return imid
+			imid = round((imin + imax)/2)
+
+			if round(self.curve(imin, self.n), 3) > round(self.curve(imax, self.n), 3):
+				if round(self.curve(imid, self.n), 3) < key:
+					return self.binSearch(key, imin, imid)
+				elif round(self.curve(imid, self.n), 3) > key:
+					return self.binSearch(key, imid, imax)
+				else:
+					return imid
+
+			else:
+				if round(self.curve(imid, self.n), 3) > key:
+					return self.binSearch(key, imin, imid)
+				elif round(self.curve(imid, self.n), 3) < key:
+					return self.binSearch(key, imid, imax)
+				else:
+					return imid
+
+		# if self.curve(imax, self.n) == key or self.curve(imin, self.n) == key:
+		# 	return 0
+		# elif round(self.curve(imid, self.n),3) < key:
+		# 	return self.binSearch(key, imin, imid + 1)
+		# elif round(self.curve(imid, self.n),3) > key:
+		# 	return self.binSearch(key, imid - 1, imax)
+		# else:
+		# 	return imid
