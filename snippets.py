@@ -59,12 +59,24 @@ def travel(ledString, color, wait):
 def breathe(ledString, color, static=True):
 	b = Breathe()
 	c = color
+	# r = list(Color('blue').range_to(Color('red'),40))
 
 	while True:
 		note = 0
 		if not static:
 			temp = temperature.get_CPU_Core()
-			b.change(temp)
+			try:
+				b.change(temp)
+			except TypeError:
+				print("Failed to get temperature!")
+				exit()
+			# if temp < 30:
+			# 	c = Color('blue')
+			# elif temp > 69:
+			# 	c = Color('red')
+			# else:
+			# 	c = r[int(temp-30)]
+
 		while note < 40:
 			c.luminance = (b.move()*0.5)
 			ledString.fill(c)
