@@ -21,7 +21,7 @@ def setup(q):
 		while True:
 			snippets.rgbFill(ledString, 1)
 	elif response == 5:
-		snippets.breathe2(ledString, Color('blue'))
+		snippets.breathe(ledString, Color('blue'), False)
 	else:
 		quit()
 

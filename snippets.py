@@ -61,20 +61,10 @@ def breathe(ledString, color, static=True):
 	c = color
 
 	while True:
-		c.luminance = (b.move()*0.5)
-		ledString.fill(c)
-		sleep(0.05)
-
-def breathe2(ledString, color):
-	b = Breathe()
-	c = color
-
-	while True:
 		note = 0
-		temp = temperature.get_CPU_Core()
-		print("Adjusting:\told x: %i\told n: %f" % (b.x, b.n))
-		b.change(temp)
-		print("%i\t\tnew x: %i\tnew n: %f" % (temp, b.x, b.n))
+		if not static:
+			temp = temperature.get_CPU_Core()
+			b.change(temp)
 		while note < 40:
 			c.luminance = (b.move()*0.5)
 			ledString.fill(c)
